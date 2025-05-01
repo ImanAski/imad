@@ -1,9 +1,20 @@
 #include "edef.h"
 #include "efunc.h"
 #include "estruct.h"
+#include "line.h"
 #include "utf8.h"
 #include "wrapper.h"
 #include <stdarg.h>
+#include <unistd.h>
+
+#if UNIX
+#include <signal.h>
+#endif
+#ifdef SIGWINCH
+#include <sys/ioctl.h>
+/* for window size changes */
+int chg_width, chg_height;
+#endif
 
 struct video {
   int v_flag;

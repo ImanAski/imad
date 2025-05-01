@@ -18,4 +18,6 @@ extern int gotobob(int f, int n);
 // display.c
 extern void vtinit(void);
 extern void movecursor(int row, int col);
+extern void mlwrite(const char *fmt, ...);
+extern void mlputs(char *s);
 extern int makelist(int iflag);

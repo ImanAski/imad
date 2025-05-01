@@ -5,10 +5,10 @@
 
 /* Internal constants */
 
-#define NFILEN 256 /* # of bytes, file name */
-#define NBUFN 16   /* # of bytes, buffer name */
-#define BIGGUY     /* just a big guy of number :) */
-#define KBLOCK 250 /* sizeof kill buffer chunks */
+#define NFILEN 256  /* # of bytes, file name */
+#define NBUFN 16    /* # of bytes, buffer name */
+#define BIGGUY 1000 /* just a big guy of number :) */
+#define KBLOCK 250  /* sizeof kill buffer chunks */
 
 #define CONTROL 0x1000000
 #define META 0x2000000
@@ -57,6 +57,12 @@
 #define IBMPC MSDOS
 
 #endif // AUTOCONF
+
+#if IBMPC
+#define MEMMAP 1
+#else
+#define MEMMAP 0
+#endif
 
 #ifndef AUTOCONF
 
@@ -107,27 +113,32 @@ struct window {
 #define WFCOLR 0x20  /* Needs a color change         */
 
 struct terminal {
-  short t_mrow;
-  short t_nrow;
-  short t_mcol;
-  short t_ncol;
-  void (*t_open)(void);     /* open terminal at start */
-  void (*t_close)(void);    /* close terminal at end */
-  void (*t_kopen)(void);    /* open keyboard */
-  void (*t_kclose)(void);   /* close keyboard */
-  void (*t_eeol)(void);     /* erase to the end of line */
-  void (*t_eeop)(void);     /* erase to the end of page */
-  void (*t_move)(int, int); /* move the cursor starting from 0 */
-  void (*t_cwp)(void);  /* copy the whole page, (n)vim. look at me. FUCK YOU */
-  void (*t_beep)(void); /* beep boop bop */
-  void (*t_rev)(int); /* set reverse video state, I can't udnerstand this one */
-  void (*t_rez)(char *);  /* change screen resolution */
-  void (*t_flush)(void);  /* Flush output buffers.        */
-  int (*t_getchar)(void); /* Get character from keyboard. */
-  int (*t_putchar)(int);  /* Put character to display.    */
+  short t_mrow;             /* max number of rows allowable */
+  short t_nrow;             /* current number of rows used  */
+  short t_mcol;             /* max Number of columns.       */
+  short t_ncol;             /* current Number of columns.   */
+  short t_margin;           /* min margin for extended lines */
+  short t_scrsiz;           /* size of scroll region "      */
+  int t_pause;              /* # times thru update to pause */
+  void (*t_open)(void);     /* Open terminal at the start.  */
+  void (*t_close)(void);    /* Close terminal at end.       */
+  void (*t_kopen)(void);    /* Open keyboard                */
+  void (*t_kclose)(void);   /* close keyboard               */
+  int (*t_getchar)(void);   /* Get character from keyboard. */
+  int (*t_putchar)(int);    /* Put character to display.    */
+  void (*t_flush)(void);    /* Flush output buffers.        */
+  void (*t_move)(int, int); /* Move the cursor, origin 0.   */
+  void (*t_eeol)(void);     /* Erase to end of line.        */
+  void (*t_eeop)(void);     /* Erase to end of page.        */
+  void (*t_beep)(void);     /* Beep.                        */
+  void (*t_rev)(int);       /* set reverse video state      */
+  int (*t_rez)(char *);     /* change screen resolution     */
 #if COLOR
   int (*t_setfor)();  /* set forground color          */
   int (*t_setback)(); /* set background color         */
+#endif
+#if SCROLLCODE
+  void (*t_scroll)(int, int, int); /* scroll a region of the screen */
 #endif
 };
 

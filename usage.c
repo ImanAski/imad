@@ -5,7 +5,7 @@
 
 void report(const char *prefix, const char *err, va_list params) {
   char msg[4096];
-  vsnprintf(stderr, sizeof(msg), prefix, params);
+  vsnprintf(msg, sizeof(msg), err, params);
   fprintf(stderr, "%s%s\n", prefix, msg);
 }
 

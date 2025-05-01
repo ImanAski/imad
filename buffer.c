@@ -1,8 +1,10 @@
-
 #include "edef.h"
+#include "efunc.h"
 #include "estruct.h"
+#include "line.h"
 #include <stdlib.h>
 #include <string.h>
+
 struct buffer *bfind(char *bname, int cflag, int bflag) {
   struct buffer *bp;
   struct buffer *sp;
@@ -23,4 +25,5 @@ struct buffer *bfind(char *bname, int cflag, int bflag) {
       }
     }
   }
+  return bp;
 }

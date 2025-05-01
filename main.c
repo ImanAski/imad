@@ -1,11 +1,11 @@
 
+#define maindef
+
 #include "edef.h"
 #include "efunc.h"
 #include "estruct.h"
 #include "version.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void usage(int status) {
   printf("Usage: %s filename\n", PROGRAM_NAME);
@@ -25,10 +25,11 @@ int main(int argc, char **argv) {
     }
   }
 
+  printf("hello\n\n");
   // Initalize the editor
-  vtinit();
-  edinit("main");
-  varinit();
+  // vtinit();
+  // edinit("main");
+  // varinit();
 
   return EXIT_SUCCESS;
 }
@@ -36,12 +37,14 @@ int main(int argc, char **argv) {
 void edinit(char *bname) {
   struct buffer *bp;
   struct window *wp;
+
   bp = bfind(bname, TRUE, 0);
   blistp = bfind("*LIST*", TRUE, BFINVS);
   wp = (struct window *)malloc(sizeof(struct window));
   if (bp == NULL || wp == NULL || blistp == NULL) {
     exit(1);
   }
+
   curbp = bp;
   wheadp = wp;
   curwp = wp;
